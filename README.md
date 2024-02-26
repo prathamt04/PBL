@@ -1,6 +1,6 @@
 python version -3.11.8(https://www.python.org/downloads)
 
-pip install numpy /n
+pip install numpy 
 pip install keras
 pip install tensorflow
 pip install opencv
