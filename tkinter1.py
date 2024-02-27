@@ -1,6 +1,8 @@
 import tkinter as tk
 import os
+from tkinter import messagebox
 from main import HandImageCapture
+from user_module import HandGestureClassifier
 
 class HandImageCaptureGUI:
     def __init__(self, master):
@@ -12,21 +14,71 @@ class HandImageCaptureGUI:
 
         self.menu_frame = tk.Frame(self.master)
         self.menu_frame.pack(pady=10)
+        
+        self.user_button = tk.Button(self.menu_frame, text="User", command=self.start_user_module)
+        self.user_button.grid(row=0, column=0, padx=10)
+        
+        self.admin_button = tk.Button(self.menu_frame, text="Admin", command=self.admin_login)
+        self.admin_button.grid(row=0, column=1, padx=10)
+        
+        self.admin_buttons = []  # To store admin buttons for later access
 
+    def start_user_module(self):
+        # Start the user module
+        gesture_classifier = HandGestureClassifier()
+        gesture_classifier.process_frame()
+
+    def admin_login(self):
+        # Create a new Toplevel window for admin login
+        self.admin_login_window = tk.Toplevel(self.master)
+        self.admin_login_window.title("Admin Login")
+
+        # Label and Entry widget for password input
+        tk.Label(self.admin_login_window, text="Enter Password:").pack()
+        self.password_entry = tk.Entry(self.admin_login_window, show="*")
+        self.password_entry.pack()
+
+        # Button to confirm password
+        tk.Button(self.admin_login_window, text="Login", command=self.check_password).pack()
+
+    def check_password(self):
+        # Get the password from the entry widget
+        password = self.password_entry.get()
+
+        # Check if the password is correct
+        if password == "1234":
+            # Destroy the login window
+            self.admin_login_window.destroy()
+            # Enable admin buttons
+            self.enable_admin_buttons()
+        else:
+            # Incorrect password, show error message
+            messagebox.showerror("Error", "Incorrect Password")
+
+    def enable_admin_buttons(self):
+        # Show admin buttons
         self.train_existing_button = tk.Button(self.menu_frame, text="Train existing sign", command=self.train_existing_sign)
         self.train_existing_button.grid(row=0, column=0, padx=10)
+        self.admin_buttons.append(self.train_existing_button)
 
         self.train_new_button = tk.Button(self.menu_frame, text="Train new sign", command=self.train_new_sign)
         self.train_new_button.grid(row=0, column=1, padx=10)
+        self.admin_buttons.append(self.train_new_button)
 
         self.get_sample_count_button = tk.Button(self.menu_frame, text="Get sample count", command=self.get_sample_count)
         self.get_sample_count_button.grid(row=0, column=2, padx=10)
+        self.admin_buttons.append(self.get_sample_count_button)
 
         self.print_samples_button = tk.Button(self.menu_frame, text="Print samples", command=self.print_samples)
         self.print_samples_button.grid(row=0, column=3, padx=10)
+        self.admin_buttons.append(self.print_samples_button)
 
-        self.exit_button = tk.Button(self.menu_frame, text="Exit", command=self.master.destroy)
-        self.exit_button.grid(row=0, column=4, padx=10)
+        self.user_button_admin = tk.Button(self.menu_frame, text="User", command=self.start_user_module)
+        self.user_button_admin.grid(row=0, column=4, padx=10)
+        self.admin_buttons.append(self.user_button_admin)
+
+    
+        
 
     def train_existing_sign(self):
         # Create a new Toplevel window for input
