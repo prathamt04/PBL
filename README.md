@@ -10,3 +10,4 @@ other : os,tkinter,math,time
 
 model training platform - Teachable machine with google(https://teachablemachine.withgoogle.com/)
 machin learning technique - Transefer learning 
+pbl project of Prathamesh and Shreyash
